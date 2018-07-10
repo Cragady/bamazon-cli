@@ -10,18 +10,48 @@ var connection = mysql.createConnection({
 });
 
 function choicesShow(){
-    connection.query("SELECT product_name FROM products", function(err, res){
+    connection.query("SELECT product_name, stock_quantity FROM bamazon.products", function(err, res){
         if(err) throw err;
         var arrPasser = [];
+        var arrCount = [];
         for(var i = 0; i < res.length; i++){
             arrPasser.push(res[i].product_name);
+            arrCount.push(res[i].stock_quantity);
         };
         connection.end();
-        buyerScript(arrPasser);
+        buyerScript(arrPasser, arrCount);
     })
 };
 
-function buyerScript(choicedArr){
+function upDatter(itmNam, itmQuant){
+    connection.query(
+        "UPDATE products SET ? WHERE ?",
+        [
+            {
+                stock_quantity: itmQuant
+            },
+            {
+                product_name: itmNam
+            }
+        ],
+        function(err, res){
+            if(err) throw err;
+            connection.end();
+        }
+    );
+};
+
+function itemLogger(itmWrite){
+    var query = "SELECT * FROM bamazon.products WHERE product_name = '" + itmWrite + "'";
+    connection.query(query, function(err, res){
+        console.log(res[0].price.toFixed(2));
+        console.log(50.00);
+        connection.end();
+    });
+
+}
+
+function buyerScript(choicedArr, choicedCount){
     inquirer.prompt([
         {
             name: "pointer",
@@ -35,10 +65,21 @@ function buyerScript(choicedArr){
             type: "input"
         }
     ]).then(answer =>{
-        console.log(answer.pointer);
-        console.log(answer.quantity);
+        switch(true){
+            case stock > 0:
+                quantumPass--;
+                upDatter(answer.pointer, answer.quantity);
+                break;
+            case stock === 0:
+                console.log("Insufficient quantity!");
+                break;
+            default:
+                console.log("Please buy something");
+        }
+        
     });
 };
 
-choicesShow();
+// choicesShow();
+itemLogger("Game Boy");
 
