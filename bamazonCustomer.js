@@ -80,14 +80,15 @@ function buyerScript(choicedArr, choicedCount){
         switch(true){
             case stock >= 0:
                 upDatter(answer.pointer, answer.quantity, stock);
-                break;
+                return;
             case stock < 0:
                 console.log("Insufficient quantity in stock! Please review purchase.");
-                break;
+                connection.end();
+                return;
             default:
                 console.log("Please buy something");
+                return;
         }
-        return;
     });
 };
 
