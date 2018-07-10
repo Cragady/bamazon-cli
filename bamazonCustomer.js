@@ -43,7 +43,7 @@ function upDatter(itmNam, numBough, itmQuant){
 function itemLogger(itmWrite, stockQua){
     var query = "SELECT * FROM bamazon.products WHERE product_name = '" + itmWrite + "'";
     connection.query(query, function(err, res){
-        console.log("You just spent $" + (res[0].price.toFixed(2) * stockQua) + " on " + stockQua + "new/used '" + itmWrite + "(s)'!");
+        console.log("You just spent $" + (res[0].price * stockQua).toFixed(2) + " on " + stockQua + " new/used '" + itmWrite + "(s)'!");
         connection.end();
     });
 
@@ -60,24 +60,34 @@ function buyerScript(choicedArr, choicedCount){
         {
             name: "quantity",
             message: "How many would you like to order?",
-            type: "input"
+            type: "input",
+            validate: function(input){
+                var validInput = /^\d+$/;
+                if(!input){
+                    return "You must specify quantity."
+                } else if (input.match(validInput)){
+                    return true;
+                } else {
+                    return "Please input a numerical value";
+                }
+            }
             //add validator here for only numerical values
         }
     ]).then(answer =>{
         var indexer = choicedArr.indexOf(answer.pointer);
         var stock = choicedCount[indexer];
+        stock -= parseFloat(answer.quantity);
         switch(true){
-            case stock > 0:
-                stock -= parseFloat(answer.quantity);
+            case stock >= 0:
                 upDatter(answer.pointer, answer.quantity, stock);
                 break;
-            case stock === 0:
-                console.log("Insufficient quantity!");
+            case stock < 0:
+                console.log("Insufficient quantity in stock! Please review purchase.");
                 break;
             default:
                 console.log("Please buy something");
         }
-        
+        return;
     });
 };
 
