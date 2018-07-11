@@ -135,7 +135,7 @@ function newItemAdd(){
                 var validInput = /^\d+$/;
                 if(!input){
                     return "You must specify quantity.";
-                } else if (input.match(validInput || validInput.toFixed(2))){
+                } else if (input.match(validInput)){
                     return true;
                 } else {
                     return "Please input a numerical value";
@@ -175,7 +175,6 @@ function microManage(manPass){
                 connection.end();
                 break;
             case action === manPass[2]:
-                console.log("add i");
                 stockAdd();
                 break;
             case action === manPass[3]:
