@@ -3,7 +3,7 @@ var mysql = require("mysql");
 
 var connection = mysql.createConnection({
     host: "localhost",
-    port: 3306, //change to 3307 for laptop and submittal
+    port: 3307, //change to 3307 for laptop and submittal
     user: "root",
     password: "root",
     database: "bamazon"
@@ -64,14 +64,13 @@ function buyerScript(choicedArr, choicedCount){
             validate: function(input){
                 var validInput = /^\d+$/;
                 if(!input){
-                    return "You must specify quantity."
+                    return "You must specify quantity.";
                 } else if (input.match(validInput)){
                     return true;
                 } else {
                     return "Please input a numerical value";
-                }
+                };
             }
-            //add validator here for only numerical values
         }
     ]).then(answer =>{
         var indexer = choicedArr.indexOf(answer.pointer);
