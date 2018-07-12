@@ -1,5 +1,6 @@
 var inquirer = require("inquirer");
 var mysql = require("mysql");
+var cTable = require("console.table");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -11,21 +12,13 @@ var connection = mysql.createConnection({
 
 function listPrada(){
     connection.query("SELECT item_id, product_name, price, stock_quantity FROM bamazon.products", function(err, res){
-        for(var i = 0; i < res.length; i++){
-            console.log(`---------------------------------------------------------------------
-ID: ${res[i].item_id} | | Item: ${res[i].product_name} | | Price: ${res[i].price.toFixed(2)} | | In Stock: ${res[i].stock_quantity}
----------------------------------------------------------------------`);
-        };
+        console.table(res);
     });
 };
 
 function loItemSho(){
     connection.query("SELECT product_name, stock_quantity FROM bamazon.products WHERE stock_quantity <= 5", function(err, res){
-        for(var i = 0; i < res.length; i++){
-            console.log(`-----------------------------------------------------
-Item: ${res[i].product_name} | | In Stock: ${res[i].stock_quantity}        
------------------------------------------------------`);
-        };
+        console.table(res)
     });
 };
 
@@ -146,13 +139,19 @@ function newItemAdd(){
         var query = "INSERT INTO products (product_name, department_name, price, stock_quantity)";
         query += "VALUES ('" + answer.idName + "', '" + answer.depName + "', " + answer.itmPrice + ", " + answer.itmQuant + ")";
         connection.query(query, function(err, res){
-            console.log(`----------------------------------
-Row added!
-Name: ${answer.idName} | | Department: ${answer.depName} | | Price: ${answer.itmPrice} | | Stock: ${answer.itmQuant}
-----------------------------------`);
+            console.log("------------------------------\nItem added! \nRow added:")
+            lastGrabber()
             connection.end();
         });
     });
+}
+
+function lastGrabber(){
+    var lastAdded = "SELECT * FROM bamazon.products ORDER BY item_id DESC LIMIT 1"
+    connection.query(lastAdded, function(err, res){
+        if (err) throw err;
+        console.table(res);
+    })
 }
 
 function microManage(manPass){
