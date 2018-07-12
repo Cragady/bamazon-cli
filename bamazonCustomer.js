@@ -92,5 +92,4 @@ function buyerScript(choicedArr, choicedCount){
 };
 
 choicesShow();
-// itemLogger("Alarm Clock");
 
