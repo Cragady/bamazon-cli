@@ -26,4 +26,7 @@ VALUES ('Game Boy', 'Electronics', 50.00, 10),
 ('Left Shoe', 'Clothing', 0.50, 50),
 ('Right Shoe', 'Clothing', 500.00, 50);
 
+ALTER TABLE products
+    ADD product_sales DECIMAL(16,2) DEFAULT 0.00;
+
 --SELECT * FROM bamazon.products;--
