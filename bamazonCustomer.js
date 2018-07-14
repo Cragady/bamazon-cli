@@ -45,7 +45,7 @@ function itemLogger(itmWrite, stockQua){
     connection.query(query, function(err, res){
         var totalSpent = parseFloat((res[0].price * stockQua).toFixed(2));
         var spendingPass = res[0].product_sales + totalSpent;
-        console.log("You just spent $" + totalSpent + " on " + stockQua + " new/used '" + itmWrite + "(s)'!");
+        console.log("You just spent $" + totalSpent.toFixed(2) + " on " + stockQua + " new/used '" + itmWrite + "(s)'!");
         productSales(itmWrite, spendingPass);
     });
 
