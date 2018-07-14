@@ -43,11 +43,30 @@ function upDatter(itmNam, numBough, itmQuant){
 function itemLogger(itmWrite, stockQua){
     var query = "SELECT * FROM bamazon.products WHERE product_name = '" + itmWrite + "'";
     connection.query(query, function(err, res){
-        console.log("You just spent $" + (res[0].price * stockQua).toFixed(2) + " on " + stockQua + " new/used '" + itmWrite + "(s)'!");
-        connection.end();
+        var totalSpent = parseFloat((res[0].price * stockQua).toFixed(2));
+        var spendingPass = res[0].product_sales + totalSpent;
+        console.log("You just spent $" + totalSpent + " on " + stockQua + " new/used '" + itmWrite + "(s)'!");
+        productSales(itmWrite, spendingPass);
     });
 
 }
+
+function productSales(itmPass ,moneh){
+    connection.query(
+        "UPDATE products SET ? WHERE ?",
+        [
+            {
+                product_sales: moneh
+            },
+            {
+                product_name: itmPass
+            }
+        ],
+        function(err, res){
+            if (err) throw err;
+            connection.end()
+    });
+};
 
 function buyerScript(choicedArr, choicedCount){
     inquirer.prompt([
