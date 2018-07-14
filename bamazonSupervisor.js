@@ -16,13 +16,45 @@ var connection = mysql.createConnection({
     database: "bamazon"
 });
 
-function depsShow(queryPass){
+function depsShow(queryPass, gateKeeper){
     connection.query(queryPass, function(err, res){
         if(err) throw err;
-        console.table(res);
+        if(gateKeeper){
+            writemUp();
+        } else {
+            console.table(res);
+        }
         connection.end();
     });
 };
+
+function writemUp(){
+    var query = "SELECT * FROM departments ORDER BY department_id DESC LIMIT 1;";
+    connection.query(query, function(err, res){
+        if(err) throw err;
+        console.table(res);
+    })
+}
+
+function newDepSoup(){
+    inquirer.prompt([
+        {
+            name: "depName",
+            message: "What is the department name?",
+            type: "input"
+        },
+        {
+            name: "depCost",
+            message: "What is the projected overhead cost?",
+            type: "input"
+        }
+    ]).then(answer =>{
+        var query = "INSERT INTO departments(department_name, over_head_costs)";
+        query += " VALUES ('"+ answer.depName + "', " + parseFloat(answer.depCost) + ");";
+        console.log(query);
+        depsShow(query, true);
+    });
+}
 
 function soupView(){
     inquirer.prompt([
@@ -36,14 +68,20 @@ function soupView(){
         console.log(answer.itmSelect);
         switch(true){
             case answer.itmSelect === "View Product Sales by Department":
-                var query = `SELECT departments.*, SUM(product_sales) AS product_sales, 
-                    SUM(product_sales)-over_head_costs AS total_profit
-                    FROM departments
-                    INNER JOIN products ON products.department_name=departments.department_name
-                    WHERE products.department_name=departments.department_name
-                    GROUP BY department_id;`
-                depsShow(query)
-        }
+            var query = `SELECT departments.*, SUM(product_sales) AS product_sales, 
+                SUM(product_sales)-over_head_costs AS total_profit
+                FROM departments
+                INNER JOIN products ON products.department_name=departments.department_name
+                GROUP BY department_id;`
+            depsShow(query);
+                break;
+            case answer.itmSelect === "Create New Department":
+                newDepSoup();
+                break;
+            default: 
+                console.log("Please do something");
+                return;
+        };
     });
 };
 
