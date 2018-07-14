@@ -37,11 +37,11 @@ function soupView(){
         switch(true){
             case answer.itmSelect === "View Product Sales by Department":
                 var query = `SELECT departments.*, SUM(product_sales) AS product_sales, 
-                SUM(product_sales)-over_head_costs AS total_profit
-                FROM departments
-                INNER JOIN products ON products.department_name=departments.department_name
-                WHERE products.department_name=departments.department_name
-                GROUP BY department_id;`
+                    SUM(product_sales)-over_head_costs AS total_profit
+                    FROM departments
+                    INNER JOIN products ON products.department_name=departments.department_name
+                    WHERE products.department_name=departments.department_name
+                    GROUP BY department_id;`
                 depsShow(query)
         }
     });
