@@ -122,6 +122,7 @@ Type `node bamazonCustomer`, `node bamazonManager`, or `node bamazonSupervisor` 
 *managerStarter()*
 
 * Sets the available actions to an array to be passed to `microManage()` in a prompt. The actions are set to an array to be used as a prompt, and as conditions used in `microManage()`'s switch statement.
+---
 
 # Supervisor
 
@@ -155,6 +156,7 @@ Type `node bamazonCustomer`, `node bamazonManager`, or `node bamazonSupervisor` 
 *soupView()*
 
 * Asks the user what they want to do. The choices being "View Product Sales by Department" and "Create New Department". A switch statement handles the events depending on the answer. If the user chose to create a new department, `newDepSoup()` is called. If the user chose to view the department sales, a variable is set to store the SQL query to pass on to `depsShow()` as an argument. After `depsShow()` is called, the departments are listed using information from both `bamazon.departments` and `bamazon.products`.
+---
 
 **Main Issue**
 
