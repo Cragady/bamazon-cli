@@ -41,12 +41,29 @@ function newDepSoup(){
         {
             name: "depName",
             message: "What is the department name?",
-            type: "input"
+            type: "input",
+            validate: function(input){
+                if(!input){
+                    return "Please input something";
+                } else {
+                    return true;
+                };
+            }
         },
         {
             name: "depCost",
             message: "What is the projected overhead cost?",
-            type: "input"
+            type: "input",
+            validate: function(input){
+                var validInput = /^\d{1,6}(\.\d{1,2})?$/;
+                if(!input){
+                    return "You must specify cost.";
+                } else if (input.match(validInput)){
+                    return true;
+                } else {
+                    return "Please input a numerical value";
+                };
+            }
         }
     ]).then(answer =>{
         var query = "INSERT INTO departments(department_name, over_head_costs)";
