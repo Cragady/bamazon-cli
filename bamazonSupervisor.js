@@ -55,7 +55,7 @@ function newDepSoup(){
             message: "What is the projected overhead cost?",
             type: "input",
             validate: function(input){
-                var validInput = /^\d{1,6}(\.\d{1,2})?$/;
+                var validInput = /^\d+$/;
                 if(!input){
                     return "You must specify cost.";
                 } else if (input.match(validInput)){
