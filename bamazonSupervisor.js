@@ -68,7 +68,6 @@ function newDepSoup(){
     ]).then(answer =>{
         var query = "INSERT INTO departments(department_name, over_head_costs)";
         query += " VALUES ('"+ answer.depName + "', " + parseFloat(answer.depCost) + ");";
-        console.log(query);
         depsShow(query, true);
     });
 }
